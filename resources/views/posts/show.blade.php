@@ -4,15 +4,16 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+        <a type="submit" class="btn btn-primary mb-2" href="/posts">Back</a>
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">{{ __('Posts') }}</div>
 
                 <div class="card-body">
-                    @if (session('status'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('status') }}
-                    </div>
-                    @endif
+
+                    <h2>{{$posts->title}}</h2>
+                    <p>{{$posts->description}}</p>
+
+
                 </div>
             </div>
         </div>

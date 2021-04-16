@@ -13,12 +13,20 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         //
         $posts = DB::table('posts')->get();
-        return $posts;
+        return view('posts.index',['posts'=>$posts]);
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -27,7 +35,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -38,7 +46,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Insert Post
+        $post = new Post();
+        $post->title = $request->title;
+        $post->description = $request->description;
+        $post->save();
+
+        return redirect('/posts');
     }
 
     /**
@@ -47,9 +61,11 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show($id)
     {
-        //
+        //Show Post
+        $posts = Post::where('id',$id)->first();
+        return view('posts.show',['posts'=>$posts]);
     }
 
     /**
@@ -58,9 +74,13 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit($id)
     {
         //
+        $posts = Post::where('id',$id)->first();
+        return view('posts.edit',['posts'=>$posts]);
+
+        return redirect('/posts');
     }
 
     /**
@@ -70,9 +90,15 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $id)
     {
-        //
+        //Update post
+        $post = Post::find($id);
+        $post->title = $request->title;
+        $post->description = $request->description;
+        $post->save();
+
+        return redirect('/posts');
     }
 
     /**
@@ -81,8 +107,12 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy( $id)
     {
-        //
+        //Delete Post
+        $post = Post::find($id);
+        $post->delete();
+
+        return redirect('/posts');
     }
 }
