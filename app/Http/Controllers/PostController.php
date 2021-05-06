@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Auth;
 class PostController extends Controller
 {
     /**
@@ -21,9 +22,11 @@ class PostController extends Controller
 
     public function index()
     {
-        //
-        $posts = DB::table('posts')->get();
-        return view('posts.index',['posts'=>$posts]);
+        $user = User::find(Auth::id());
+        $posts = $user->posts()->where('title','!=','')->get();
+        $count = $user->posts()->where('title','!=','')->count();
+
+        return view('posts.index', compact('posts', 'count'));
     }
 
 
@@ -74,6 +77,7 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->description = $request->description;
         $post->img = $filenameToStore;
+        $post->user_id = auth()->user()->id;
         $post->save();
 
         return redirect('/posts');
@@ -85,11 +89,13 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
         //Show Post
-        $posts = Post::where('id',$id)->first();
-        return view('posts.show',['posts'=>$posts]);
+        $post = Post::find($post->id);
+        $comments = $post->comments;
+
+        return view('posts.show', compact('post','comments'));
     }
 
     /**

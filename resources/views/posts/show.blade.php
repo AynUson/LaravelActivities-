@@ -10,17 +10,18 @@
 
                 <div class="card-body">
 
-                    <h2>Title: {{$posts->title}}</h2>
+                    <h2>Title: {{$post->title}}</h2>
                     <br>
-                    <p>Description: {{$posts->description}}</p>
+                    <p>Description: {{$post->description}}</p>
                     <br>
-                    <p>Image: </p>
-                    @if ($posts->img)
-                        <img src="{{ URL::asset('/storage/img/'.$posts->img)  }} " alt="{{ $posts->img }}"/>
+                    <!-- <p>Image: </p>
+                    @if ($post->img)
+                        <img src="{{ asset('/storage/img/'.$post->img) }} " alt="{{ $post->img }}"/>
                     @else
                     <h4>Post has no image</h4>
-                    @endif
+                    @endif -->
 
+                    @include('/posts/comments')
 
 
                 </div>
